@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d0d10">
+<title>karim · doska</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    background:#1c1c20;
+    background-image:radial-gradient(120% 90% at 50% 0%,rgba(255,255,255,.09),transparent 64%);
+    color:#f4f4f5;min-height:100vh;-webkit-font-smoothing:antialiased;
+    padding:clamp(10px,1.6vw,26px);
+  }
+  .panel{
+    width:100%;min-height:calc(100vh - 2*clamp(10px,1.6vw,26px));
+    display:flex;flex-direction:column;overflow:hidden;
+    background:linear-gradient(112deg,#0d0d10 0%,#070709 46%,#030304 100%);
+    border-radius:14px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.16),0 clamp(16px,2.4vw,40px) clamp(30px,5vw,80px) rgba(0,0,0,.72);
+    padding:clamp(16px,2vw,32px) clamp(16px,2.4vw,38px) clamp(14px,1.6vw,24px);
+  }
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;
+       font-size:clamp(11px,1vw,13px);color:#a0a0a6;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;color:#fff;font-weight:600}
+  .dotmark{width:14px;height:14px;border-radius:3px;background:#fff;opacity:.92}
+  .brand span{color:#7c7c82;font-weight:400}
+  .meta{display:flex;align-items:center;gap:7px;white-space:nowrap}
+  .dot{width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.14)}
+  .main{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:clamp(14px,2vw,26px);padding:clamp(12px,2vw,26px) 0}
+  .kick{font-size:clamp(10px,.85vw,11px);letter-spacing:2.4px;text-transform:uppercase;color:#9a9aa0;font-weight:600}
+  .hero{font-size:clamp(34px,6.4vw,86px);font-weight:800;line-height:.94;letter-spacing:-.04em;color:#fff;margin-top:clamp(6px,1vw,12px)}
+  .hero small{font-size:.32em;font-weight:600;color:#8d8d93;margin-left:.35em;letter-spacing:0}
+  .sub{margin-top:clamp(8px,1.2vw,16px);font-size:clamp(12px,1.2vw,15px);line-height:1.55;color:#b3b3b8;max-width:74ch}
+  .sub b{color:#fff;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:clamp(8px,1.2vw,16px);margin-top:clamp(14px,2.2vw,30px)}
+  .cell{border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:clamp(10px,1.3vw,16px);background:rgba(255,255,255,.022);min-width:0}
+  .cell .k{font-size:clamp(9px,.8vw,10.5px);letter-spacing:1.7px;text-transform:uppercase;color:#8e8e94}
+  .cell .v{display:block;margin-top:6px;font-size:clamp(16px,2vw,24px);font-weight:700;letter-spacing:-.02em}
+  .cell .u{font-size:clamp(9.5px,.9vw,11.5px);color:#8d8d93;margin-left:5px;font-weight:500}
+  .tbl{min-width:0}
+  .tbl .th{font-size:clamp(9px,.8vw,10.5px);letter-spacing:1.6px;text-transform:uppercase;color:#85858b;
+           padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12)}
+  .row{display:grid;gap:10px;align-items:center;padding:clamp(7px,1vw,11px) 2px;
+       border-bottom:1px solid rgba(255,255,255,.07);font-size:clamp(11px,1.05vw,13.5px);color:#c9c9ce;min-width:0}
+  .row span:first-child{color:#fff;font-weight:600}
+  .row .num,.th .num{text-align:right;font-variant-numeric:tabular-nums}
+  .row.total{border-bottom:0;border-top:1px solid rgba(255,255,255,.16);color:#fff;font-weight:600}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+        padding-top:clamp(10px,1.4vw,16px);font-size:clamp(9.5px,.82vw,11px);color:#8b8b91}
+  .err{color:#f88;font-size:13px;line-height:1.5}
+  /* kirish */
+  .gate{display:none;flex:1;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px;padding:clamp(16px,3vw,40px) 0}
+  .gate.on{display:flex}
+  .gate input{width:min(100%,260px);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);
+    border-radius:8px;color:#fff;padding:12px 14px;font-size:16px;letter-spacing:3px;text-transform:uppercase;outline:none}
+  .gate input:focus{border-color:rgba(255,255,255,.45)}
+  .gate button{background:#fff;color:#0a0a0c;border:0;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:700}
+  .gate .lab{font-size:clamp(10px,.85vw,11px);letter-spacing:2.4px;text-transform:uppercase;color:#9a9aa0;font-weight:600}
+  @media (max-width:560px){
+    .hero small{display:block;margin:.25em 0 0}
+    .grid{grid-template-columns:1fr 1fr}
+    .row,.th{grid-template-columns:1.3fr .8fr .8fr}
+    .row .hide,.th .hide{display:none}
+    .foot{font-size:10px}
+  }
+</style></head>
+<body>
+  <section class="panel">
+    <div class="top">
+      <div class="brand"><i class="dotmark"></i><span id="brand" style="color:#fff">karim</span> <span id="sub-brand">/ doska</span></div>
+      <div class="meta"><i class="dot"></i><span id="meta">yuklanmoqda</span></div>
+    </div>
+    <div class="main" id="main"></div>
+    <div class="gate" id="gate">
+      <div class="lab">kirish kodi</div>
+      <input id="code" inputmode="latin" autocomplete="off" maxlength="12" placeholder="········">
+      <button id="go">ochish</button>
+      <div class="err" id="gerr"></div>
+    </div>
+    <div class="foot"><span id="source">manba: state.db · DeepSeek API</span><span id="stamp"></span></div>
+  </section>
+
+<script>
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const SALT = 'karim-board-salt-v1';
+let DATA = null;
+
+function render(d){
+  if(!d) return;
+  const main = document.getElementById('main');
+  document.getElementById('brand').textContent = d.brand || 'karim';
+  document.getElementById('sub-brand').textContent = '/ ' + (d.page || 'doska');
+  document.getElementById('meta').textContent = (d.live ? 'live · ' : '') + (d.updated || '');
+  document.getElementById('source').textContent = d.source || '';
+
+  let h = '';
+  if(d.hero){
+    h += '<div><div class="kick">' + esc(d.hero.label || '') + '</div>' +
+         '<div class="hero">' + esc(d.hero.value || '') +
+         (d.hero.unit ? '<small>' + esc(d.hero.unit) + '</small>' : '') + '</div>' +
+         (d.hero.sub ? '<div class="sub">' + d.hero.sub + '</div>' : '') + '</div>';
+  }
+  if(d.kpis && d.kpis.length){
+    h += '<div class="grid">' + d.kpis.map(k =>
+      '<div class="cell"><div class="k">' + esc(k.k) + '</div><span class="v">' + esc(k.v) +
+      (k.u ? '<span class="u">' + esc(k.u) + '</span>' : '') + '</span></div>').join('') + '</div>';
+  }
+  if(d.table){
+    const t = d.table, cols = t.head.length;
+    const tmpl = t.widths ? 'grid-template-columns:' + t.widths.join(' ') : 'grid-template-columns:1.6fr repeat(' + (cols-1) + ',1fr)';
+    h += '<div class="tbl">' +
+      '<div class="row th" style="' + tmpl + '">' + t.head.map((c,i) =>
+        '<span class="' + (i ? 'num' : '') + (c.hide ? ' hide' : '') + '">' + esc(c.t) + '</span>').join('') + '</div>' +
+      t.rows.map(r => '<div class="row' + (r.total ? ' total' : '') + '" style="' + tmpl + '">' +
+        r.cells.map((c,i) => '<span class="' + (i ? 'num' : '') + (c.hide ? ' hide' : '') + '">' + esc(c.v) + '</span>').join('') + '</div>').join('') +
+      '</div>';
+  }
+  if(d.note) h += '<div class="sub" style="margin-top:0;color:#9a9aa0;font-size:clamp(10.5px,1vw,12.5px)">' + d.note + '</div>';
+  main.innerHTML = h;
+}
+
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function deriveKey(code){
+  const enc = new TextEncoder();
+  const km = await crypto.subtle.importKey('raw', enc.encode(code), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt: enc.encode(SALT), iterations: 150000, hash:'SHA-256' },
+    km, { name:'AES-GCM', length:256 }, false, ['decrypt']);
+}
+
+async function pull(code){
+  const r = await fetch('data.enc.json?t=' + Date.now(), { cache:'no-store' });
+  if(!r.ok) throw new Error('fayl yo\'q');
+  const p = await r.json();
+  const key = await deriveKey(code);
+  const buf = b64(p.ct);
+  const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv: b64(p.iv) }, key, buf);
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function showGate(msg){
+  document.getElementById('main').innerHTML = '';
+  document.getElementById('gate').classList.add('on');
+  document.getElementById('gerr').textContent = msg || '';
+  document.getElementById('meta').textContent = 'yopiq';
+  setTimeout(() => document.getElementById('code').focus(), 120);
+}
+
+async function open(code, remember){
+  try{
+    const d = await pull(code);
+    DATA = d;
+    document.getElementById('gate').classList.remove('on');
+    render(d);
+    document.getElementById('stamp').textContent = d.updated || '';
+    if(remember) localStorage.setItem('bk', code);
+    document.getElementById('gerr').textContent = '';
+    return true;
+  }catch(e){
+    if(remember) localStorage.removeItem('bk');
+    showGate('kod xato yoki ma\'lumot yo\'q.');
+    return false;
+  }
+}
+
+document.getElementById('go').onclick = () => {
+  const v = (document.getElementById('code').value || '').trim().toUpperCase();
+  if(v.length < 4) return showGate('kodni kiriting.');
+  open(v, true);
+};
+document.getElementById('code').addEventListener('keydown', e => { if(e.key === 'Enter') document.getElementById('go').click(); });
+
+(async () => {
+  const saved = localStorage.getItem('bk');
+  if(saved){
+    const ok = await open(saved, false);
+    if(ok) setInterval(async () => { try{ const d = await pull(saved); render(d); document.getElementById('stamp').textContent = d.updated || ''; }catch(e){} }, 60000);
+    return;
+  }
+  showGate('');
+})();
+</script>
+</body></html>
